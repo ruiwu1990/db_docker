@@ -1,23 +1,21 @@
-FROM nvidia/cuda:latest
+FROM library/postgres
 MAINTAINER Rui Wu
-LABEL description="Parts of this docker file is from nvidia/cuda image."
+LABEL description="Postgres SQL."
 
 RUN apt-get update -y
-RUN apt-get install -y python-pip python-dev build-essential cmake gdal-bin libgdal-dev
+RUN apt-get install -y python-pip python-dev build-essential
 
-ENV CPLUS_INCLUDE_PATH /usr/include/gdal
-ENV C_INCLUDE_PATH /usr/include/gdal
 
 #copy source code
-COPY . /fire_sim
-WORKDIR /fire_sim
-ENV PYTHONPATH /var/www/fire_sim
+COPY . /db_docker
+WORKDIR /db_docker
+ENV PYTHONPATH /db_docker
 
-#build fire lib
-RUN rm -rf /fire_sim/fire_sim_lib/build/* \ 
-    && cd /fire_sim/fire_sim_lib/build \ 
-    && cmake .. \ 
-    && make
+#setup db
+ENV POSTGRES_USER docker
+ENV POSTGRES_PASSWORD docker
+ENV POSTGRES_DB docker
+
 
 #install requirements
 RUN pip install -r requirements.txt
