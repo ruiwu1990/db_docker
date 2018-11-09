@@ -12,13 +12,18 @@ The system has been tested with Docker version 17.03 and 17.05
 
 You can run the program by:
 ```
-docker run --name <container_name> -h 134.197.20.79 -p 5000:5000 ruiwu1990/jessie_fire_simulation:Dockerized python views.py
+docker run --name <container_name> -h <your_machine_ip> -p 5000:5000 ruiwu1990/db_docker python views.py
 ```
 
-134.197.40.40 should be replaced with your machine ip address. The command is to set up a server with your machine
+'container_name' is your docker container name and 'your_machine_ip' should be your machine ip.
+
 -p 5000:5000 means that mapping host machine port 5000 (first one) with docker container port 5000 (second one)
 
-#Local Quick Start
+Here is the command I used in my machine:
+```
+docker run --name postgresql_docker -h 150.216.82.155 -p 5000:5000 ruiwu1990/db_docker python views.py
+```
+<!-- #Local Quick Start
 ##Before You Start
 First create a virtual environment
 ```
@@ -39,13 +44,13 @@ Here is the command to set up and run the program
 python views.py -h 134.197.20.79 -p 5000 --threaded
 ```
 134.197.20.79 should be replaced with your machine ip address. The command is to set up a server with your machine
-
+ -->
 #Website URL
 The system is available here
 ```
-<Your IP>:5000/upload
+<Your IP>:5000/
 ```
 For me the URL replaced with my ip is:
 ```
-134.197.20.79:5000/upload
+150.216.82.155:5000/
 ```

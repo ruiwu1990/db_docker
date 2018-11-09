@@ -2,6 +2,9 @@ FROM library/postgres
 MAINTAINER Rui Wu
 LABEL description="Postgres SQL."
 
+#setup db
+COPY init.sql /docker-entrypoint-initdb.d/
+
 RUN apt-get update -y
 RUN apt-get install -y python-pip python-dev build-essential
 
@@ -10,11 +13,6 @@ RUN apt-get install -y python-pip python-dev build-essential
 COPY . /db_docker
 WORKDIR /db_docker
 ENV PYTHONPATH /db_docker
-
-#setup db
-ENV POSTGRES_USER docker
-ENV POSTGRES_PASSWORD docker
-ENV POSTGRES_DB docker
 
 
 #install requirements
