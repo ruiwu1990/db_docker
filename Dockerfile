@@ -21,8 +21,8 @@ ENV POSTGRES_DB docker
 RUN pip install -r requirements.txt
 
 EXPOSE 5000
-ENV FIRE_PORT 80
-ENV FIRE_HOST 0.0.0.0
-EXPOSE ${FIRE_PORT}
+ENV DOCKER_DB_PORT 80
+ENV DOCKER_DB_HOST 0.0.0.0
+EXPOSE ${DOCKER_DB_PORT}
 
 CMD python views.py -p 5000 --threaded
