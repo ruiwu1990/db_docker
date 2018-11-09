@@ -1,48 +1,52 @@
 import os, subprocess
 from pathlib import Path
+import psycopg2
+from psycopg2 import errorcodes 
 
 app_path = os.path.dirname(os.path.abspath(__file__))
-data_loc = 'database/'
-result_loc = 'results/'
 
-def get_file_extension(filename = ''):
+def init_db(filename_list, connect_command):
     '''
     '''
-    return filename.split('.')[-1]
+    conn = connect_db(connect_command)
+    if conn == 0:
+        print('cannot connect to db')
+    else:
+        cursor = conn.cursor()
+        try:
+            # setup database
+            for filename in filename_list:
+                fp = open(filename, 'r')
+                cursor.execute(fp.read())
 
-def py_file_code_convention_analysis(filename = 'test.py'):
+                fp.close()
+            conn.commit()
+            conn.close()
+            return 1
+        except psycopg2.Error as e:
+            # print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+            print(errorcodes.lookup(e.pgcode[:2]))
+            return 0
+
+
+    # print('aaaaaaaaaaaaaaaaaaaaaa')
+    # filename = 'data/student.sql'
+    # fp = open(filename, 'r')
+    # cursor.execute(fp.read())
+    # fp.close()
+    # conn.commit()
+    # cursor.close()
+    # conn.close()
+    # return 1
+
+def connect_db(connect_command):
     '''
-    this function analyzes python codes
     '''
-    input_file = data_loc + filename
-    # run analysis
-    log_path = result_loc + 'python_analysis.log'
-    err_log_path = result_loc + 'python_analysis_err.log'
+    try:
+        conn = psycopg2.connect("dbname='docker' user='docker' host='localhost' password='docker'")        
+    except psycopg2.Error as e:
+        print(errorcodes.lookup(e.pgcode[:2]))
+        return 0
 
-
-    if not Path(log_path).is_file():
-        # file does not exist, need to create an empty one
-        open(log_path, 'a').close()
-
-    if not Path(err_log_path).is_file():
-        # file does not exist, need to create an empty one
-        open(err_log_path, 'a').close()
-
-    if get_file_extension(filename) == 'py':
-        command = ['pylint', input_file]
-    elif get_file_extension(filename) == 'java':
-        # TODO this is for sun-rule-based check
-        # the google-rule-based check is /google_checks.xml
-        check_rule = '/sun_checks.xml'
-        command = ['java', '-jar', 'code_analyser/checkstyle-8.12-all.jar', '-c', check_rule, input_file]
-    with open(log_path, 'wb') as process_out, open(log_path, 'rb', 1) as reader, open(err_log_path, 'wb') as err_out:
-        process = subprocess.Popen( 
-            command, stdout=process_out, stderr=err_out, cwd=app_path)
-    # wait until the process finishes
-    process.wait()
-    fp_log = open(log_path, 'r')
-    content = fp_log.read()
-    fp_log.close()
-    return content
-    # return Response(content, mimetype='text/plain')
-
+    return conn
+    

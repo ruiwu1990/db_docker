@@ -1,58 +1,32 @@
 $(document).ready(function(){
-    // window.onload = function() {
-    var editor_python = CodeMirror.fromTextArea(document.getElementById("code-python"), {
-        lineNumbers: true,
-        mode: "python",
-        matchBrackets: true,
-        foldGutter: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-
-      });
-    // };
-    var editor_java = CodeMirror.fromTextArea(document.getElementById("code-java"), {
-        lineNumbers: true,
-        mode: "text/x-java",
-        matchBrackets: true,
-        // foldGutter: true,
-        // gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-
-      });
-    // auto complete
-    var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
-    CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
-
-    $('#evaluate_python_button_id').click(function(){
+    $('#execute_button_id').click(function(){
         // get user inputted code
-        var code_input = editor_python.getValue();
-        // console.log(code_input);
-        var review_url = '/api/analyze_code/py';
-        // console.log(review_url);
-        $.post(review_url, {code: code_input}, function(code_input){
-            console.log('Code has been uploaded.');
-            // $('#code_review').text(data);
-        });
-        // TODO this get may take a very long time if the program is huge...
-        // Need a for loop to check if get has been done...
-        $.get(review_url, function(data){
-            $('#code_review').text(data);
-        });
-    });
+        var input_sql = $('#sql_command').val();
+        var tmp_word = input_sql.split(' ');
+        if( tmp_word[0] == 'Select' || tmp_word[0] == 'select' )
+        {
+            var get_url = '/api/execute_sql_display/'+input_sql;
+            $.get(get_url, function(data){
+                console.log('Query has been uploaded.');
+                // TODO, display it as a nice table
+                $('#select_result_id').text(data);
+            });
+        }
+        else
+        {
+            var post_url = '/api/execute_sql/'+input_sql;
+            // $.post(post_url, {query: input_sql}, function(input_sql){
+            //     console.log('Query has been uploaded.');
+            // });
+            $.get(post_url, function(data){
+                console.log('Query has been uploaded.');
+                // TODO, display it as a nice table
+                $('#select_result_id').text(data);
+            });
+        }
 
-    $('#evaluate_java_button_id').click(function(){
-        // get user inputted code
-        var code_input = editor_java.getValue();
-        // console.log(code_input);
-        var review_url = '/api/analyze_code/java';
-        // console.log(review_url);
-        $.post(review_url, {code: code_input}, function(code_input){
-            console.log('Code has been uploaded.');
-            // $('#code_review').text(data);
-        });
-        // TODO this get may take a very long time if the program is huge...
-        // Need a for loop to check if get has been done...
-        $.get(review_url, function(data){
-            $('#code_review').text(data);
-        });
+
+
     });
 
 

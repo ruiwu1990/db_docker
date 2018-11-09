@@ -1,52 +1,108 @@
 from flask import Flask, render_template, send_from_directory, request
 import os
 import psycopg2
+from psycopg2 import errorcodes 
 import socket
-
+import util
 
 app = Flask(__name__)
 
 app_path = os.path.dirname(os.path.abspath(__file__))
 
-try:
-    conn = psycopg2.connect("dbname='docker' user='docker' host='localhost' password='docker'")
-except:
-    print("I am unable to connect to the database")
 
+db_connect_command = "dbname='docker' user='docker' host='localhost' password='docker'"
 sql_file = ['data/student.sql']
 # sql_file = ['data/company.sql','data/student.sql','data/world.sql']
-cursor = conn.cursor()
+# cursor = conn.cursor()
 
-@app.route('/execute_sql')
-def execute_sql():
+@app.route('/api/execute_sql/<sql_query>', methods=['GET'])
+def execute_sql(sql_query=''):
     '''
     TODO, execute sql and return results for post requests
     '''
+    # sql_command = 'select * from student;'
+    conn = util.connect_db(db_connect_command)
+    cursor = conn.cursor()
 
+    try:
+        cursor.execute(sql_query)
+        # conn.commit()
+        conn.close()
+        return 'Query has been Done.'
+    except psycopg2.Error as e:
+        conn.rollback()
+        conn.close()
+        return errorcodes.lookup(e.pgcode[:2])
+    
+    # info = cursor.fetchall()
+    # info = [(1, 'William', 'Campbell'),
+    #          (2, 'Robert', 'Hill'),
+    #          (3, 'Joseph', 'Green'),
+    #          (4, 'Jeff', 'Wilson'),
+    #          (5, 'Patricia', 'Davis'),
+    #          (6, 'Susan', 'Brown'),
+    #          (7, 'Thomas', 'Smith'),
+    #          (8, 'Mark', 'Williams'),
+    #          (9, 'Paul', 'Jones'),
+    #          (10, 'Barbara', 'Robinson'),
+    #          (11, 'Jennifer', 'King'),
+    #          (12, 'Sarah', 'Parker'),
+    #          (13, 'Lisa', 'Lopez'),
+    #          (14, 'Sharon', 'Jackson'),
+    #          (15, 'Kevin', 'Miller')]
+
+@app.route('/api/execute_sql_display/<sql_query>', methods=['GET'])
+def execute_sql_display(sql_query=''):
+    '''
+    begin with select, so return results back
+    '''
+    conn = util.connect_db(db_connect_command)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(sql_query)
+        result = cursor.fetchall()
+        # conn.commit()
+        conn.close()
+        return str(result)
+    except psycopg2.Error as e:
+        conn.rollback()
+        conn.close()
+        return errorcodes.lookup(e.pgcode[:2])
+
+    
 
 @app.route('/')
 def index():
-    # test tmp
-    # log = util.py_file_code_convention_analysis('test.py')
-    log = 'Reviews will be displayed here.'
-    
-    return render_template('index.html', log_html = log)
+    conn = util.connect_db(db_connect_command)
+    if conn == 0:
+        info = 'error'
+    else:
+        cursor = conn.cursor()
+        try:
+            sql_command = 'select * from student;'
+            cursor.execute(sql_command)
+            info = cursor.fetchall()
+            conn.close()
+        except psycopg2.Error as e:
+            conn.close()
+            info = errorcodes.lookup(e.pgcode[:2])
+    return render_template('index.html', info = info)
 
 
 if __name__ == '__main__':
     app.debug = True
-    # setup database
-    for filename in sql_file:
-        fp = open(filename, 'r')
-        cursor.execute(fp.read())
-        fp.close()
+    util.init_db(sql_file, db_connect_command)
 
-    # get current machine IP
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    ip = s.getsockname()[0]
-    s.close()
-    app.run(host=ip)
+    app.run(host = '0.0.0.0')
+
+    # # get current machine IP
+    # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # s.connect(("8.8.8.8", 80))
+    # ip = s.getsockname()[0]
+    # s.close()
+    # app.run(host=ip)
+
 
 # app.run(host='150.216.56.49')
 # a possible template: https://blackrockdigital.github.io/startbootstrap-sb-admin-2/pages/index.html#
