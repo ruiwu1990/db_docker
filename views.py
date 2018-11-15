@@ -26,7 +26,7 @@ def execute_sql(sql_query=''):
 
     try:
         cursor.execute(sql_query)
-        # conn.commit()
+        conn.commit()
         conn.close()
         return 'Query has been Done.'
     except psycopg2.Error as e:
@@ -34,22 +34,6 @@ def execute_sql(sql_query=''):
         conn.close()
         return errorcodes.lookup(e.pgcode[:2])
     
-    # info = cursor.fetchall()
-    # info = [(1, 'William', 'Campbell'),
-    #          (2, 'Robert', 'Hill'),
-    #          (3, 'Joseph', 'Green'),
-    #          (4, 'Jeff', 'Wilson'),
-    #          (5, 'Patricia', 'Davis'),
-    #          (6, 'Susan', 'Brown'),
-    #          (7, 'Thomas', 'Smith'),
-    #          (8, 'Mark', 'Williams'),
-    #          (9, 'Paul', 'Jones'),
-    #          (10, 'Barbara', 'Robinson'),
-    #          (11, 'Jennifer', 'King'),
-    #          (12, 'Sarah', 'Parker'),
-    #          (13, 'Lisa', 'Lopez'),
-    #          (14, 'Sharon', 'Jackson'),
-    #          (15, 'Kevin', 'Miller')]
 
 @app.route('/api/execute_sql_display/<sql_query>', methods=['GET'])
 def execute_sql_display(sql_query=''):
@@ -94,15 +78,14 @@ if __name__ == '__main__':
     app.debug = True
     util.init_db(sql_file, db_connect_command)
 
-    app.run(host = '0.0.0.0')
+    # app.run(host = '0.0.0.0')
 
-    # # get current machine IP
-    # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # s.connect(("8.8.8.8", 80))
-    # ip = s.getsockname()[0]
-    # s.close()
-    # app.run(host=ip)
+    # get current machine IP
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = s.getsockname()[0]
+    s.close()
+    app.run(host=ip)
 
 
-# app.run(host='150.216.56.49')
 # a possible template: https://blackrockdigital.github.io/startbootstrap-sb-admin-2/pages/index.html#

@@ -24,20 +24,10 @@ def init_db(filename_list, connect_command):
             conn.close()
             return 1
         except psycopg2.Error as e:
-            # print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
             print(errorcodes.lookup(e.pgcode[:2]))
             return 0
 
 
-    # print('aaaaaaaaaaaaaaaaaaaaaa')
-    # filename = 'data/student.sql'
-    # fp = open(filename, 'r')
-    # cursor.execute(fp.read())
-    # fp.close()
-    # conn.commit()
-    # cursor.close()
-    # conn.close()
-    # return 1
 
 def connect_db(connect_command):
     '''
