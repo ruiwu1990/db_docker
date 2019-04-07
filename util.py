@@ -33,7 +33,7 @@ def connect_db(connect_command):
     '''
     '''
     try:
-        conn = psycopg2.connect("dbname='docker' user='docker' host='localhost' password='docker'")        
+        conn = psycopg2.connect(connect_command)        
     except psycopg2.Error as e:
         print(errorcodes.lookup(e.pgcode[:2]))
         return 0
