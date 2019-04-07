@@ -9,7 +9,7 @@ LABEL description="Postgres SQL."
 COPY init.sql /docker-entrypoint-initdb.d/
 
 RUN apt-get update -y
-RUN apt-get install -y python-pip python-dev build-essential
+RUN apt-get install -y python-pip python-dev build-essential python-psycopg2
 
 
 #copy source code
