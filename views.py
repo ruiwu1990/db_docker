@@ -76,7 +76,8 @@ def index():
 
 if __name__ == '__main__':
     app.debug = True
-    util.init_db(sql_file, db_connect_command)
+    # test
+    # util.init_db(sql_file, db_connect_command)
 
     # app.run(host = '0.0.0.0')
 
