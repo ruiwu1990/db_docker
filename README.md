@@ -1,5 +1,37 @@
 This is an example about how to integrate PostgreSQL with Flask.
 
+#Local Quick Start
+##Before You Start
+First, open a terminal set up a PostgreSQL database
+```
+sudo -u postgres psql
+create database tmpdb;
+create user tmp with encrypted password 'tmp';
+grant all privileges on database tmpdb to tmp;
+```
+
+
+Then, open another terminal to create a virtual environment
+```
+mkvirtualenv -p python2.7 dev
+```
+
+If you have created the virtual environment, then use this commend to enter it
+```
+virtualenv dev && source dev/bin/activate
+```
+
+Here is the command to install the requirements
+```
+pip install -r requirements.txt
+```
+Here is the command to set up and run the program
+```
+python views.py -h 134.197.20.79 -p 5000 --threaded
+```
+134.197.20.79 should be replaced with your machine ip address. The command is to set up a server with your machine
+
+
 #Docker Quick Start
 ##Before You Start
 1. You need to install the docker engine and here is the official link how to do it:
@@ -22,28 +54,7 @@ Here is the command I used in my machine:
 ```
 docker run --name postgresql_docker -h 150.216.82.155 -p 5000:5000 ruiwu1990/db_docker python views.py
 ```
-<!-- #Local Quick Start
-##Before You Start
-First create a virtual environment
-```
-mkvirtualenv -p python2.7 dev
-```
 
-If you have created the virtual environment, then use this commend to enter it
-```
-virtualenv dev && source dev/bin/activate
-```
-
-Here is the command to install the requirements
-```
-pip install -r requirements.txt
-```
-Here is the command to set up and run the program
-```
-python views.py -h 134.197.20.79 -p 5000 --threaded
-```
-134.197.20.79 should be replaced with your machine ip address. The command is to set up a server with your machine
- -->
 #Website URL
 The system is available here
 ```

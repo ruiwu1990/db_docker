@@ -10,7 +10,8 @@ app = Flask(__name__)
 app_path = os.path.dirname(os.path.abspath(__file__))
 
 
-db_connect_command = "dbname='docker' user='docker' host='localhost' password='docker'"
+db_connect_command = "dbname='tmpdb' user='tmp' host='localhost' password='tmp'"
+# db_connect_command = "dbname='docker' user='docker' host='localhost' password='docker'"
 sql_file = ['data/student.sql']
 # sql_file = ['data/company.sql','data/student.sql','data/world.sql']
 # cursor = conn.cursor()
@@ -76,9 +77,7 @@ def index():
 
 if __name__ == '__main__':
     app.debug = True
-    print 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-    # test
-    # util.init_db(sql_file, db_connect_command)
+    util.init_db(sql_file, db_connect_command)
 
     # app.run(host = '0.0.0.0')
 
@@ -90,4 +89,5 @@ if __name__ == '__main__':
     app.run(host=ip)
 
 
-# a possible template: https://blackrockdigital.github.io/startbootstrap-sb-admin-2/pages/index.html#
+# possible commands: select * from major;
+# delete from major where sid = 1;
