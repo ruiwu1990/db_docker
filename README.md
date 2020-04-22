@@ -2,13 +2,7 @@ This is an example about how to integrate PostgreSQL with Flask.
 
 #Local Quick Start
 ##Before You Start
-First, open a terminal set up a PostgreSQL database
-```
-sudo -u postgres psql
-create database tmpdb;
-create user tmp with encrypted password 'tmp';
-grant all privileges on database tmpdb to tmp;
-```
+First, you need to follow the tutorial at [here]('https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04') to create a PostgreSQL db named tmpdb, username is tmp, password is tmp (dbname='tmpdb' user='tmp' host='localhost' password='tmp').
 
 
 Then, open another terminal to create a virtual environment
