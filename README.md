@@ -1,7 +1,7 @@
 This is an example about how to integrate PostgreSQL with Flask.
 
-#Local Quick Start
-##Before You Start
+# Local Quick Start
+## Before You Start
 First, you need to follow the tutorial at [here]('https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04') to create a PostgreSQL db named tmpdb, username is tmp, password is tmp (dbname='tmpdb' user='tmp' host='localhost' password='tmp').
 
 
@@ -26,8 +26,8 @@ python views.py -h 134.197.20.79 -p 5000 --threaded
 134.197.20.79 should be replaced with your machine ip address. The command is to set up a server with your machine
 
 
-#Docker Quick Start
-##Before You Start
+# Docker Quick Start
+## Before You Start
 1. You need to install the docker engine and here is the official link how to do it:
 [Docker Engine Install Official link](https://docs.docker.com/engine/installation/linux/ubuntu/#install-using-the-repository). 
 The system has been tested with Docker version 17.03 and 17.05
