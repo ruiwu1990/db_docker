@@ -13,7 +13,7 @@ python3 -m venv python_venv
 
 If you have created the virtual environment, then use this commend to enter it
 ```
-source python_venv/bin/activatee
+source python_venv/bin/activate
 ```
 
 Here is the command to install the requirements
